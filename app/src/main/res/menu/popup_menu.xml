@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/popup_menu">
+        <item android:id="@+id/shuaxing"
+            android:title="更新数据"
+            android:showAsAction="never"/>
+        <item android:id="@+id/li_shendu_tu"
+            android:title="力和深度图"
+            android:showAsAction="never" />
+        <item android:id="@+id/shendu_yaqiang_tu"
+            android:title="深度和压强图"
+            android:showAsAction="never" />
+    </group>
+</menu>
