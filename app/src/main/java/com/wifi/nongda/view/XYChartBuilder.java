@@ -24,46 +24,54 @@ public class XYChartBuilder {
     private static final int LI = 0;
     private static final int SHENDU = 1;
     private static final int YAQIANG = 2;
+    private static int count = 0;
     protected XYMultipleSeriesDataset mDataSet;
     protected XYMultipleSeriesRenderer mRenderer;
     private GraphicalView view;
     int li;
     private Context context;
-
+    XYSeries series;
     public XYChartBuilder(Context context, int li) {
         this.context = context;
         mDataSet = new XYMultipleSeriesDataset();
         mRenderer = new XYMultipleSeriesRenderer();
         this.li = li;
-
-        initData();
+        String title = "Series" + (mDataSet.getSeriesCount() + 1);
+        series = new XYSeries(title);
+        series.add(0,0);
+        mDataSet.addSeries(series);
+      //  initData();
         initRenderer();
     }
 
-    protected void initData() {
-        String title = "Series" + (mDataSet.getSeriesCount() + 1);
-        XYSeries series = new XYSeries(title);
-        DataDB helper = new DataDB(context);
-        ArrayList<DataInfo> infos = helper.query();
-        //int column [][] = new int[][3];
-        if (infos.size() > 0)
-        for(int i = 0; i < infos.size(); i++) {
-            DataInfo di = infos.get(i);
-            switch (li) {
-                case 0:
-                    series.add(di.getShenDu(), di.getYaQiang());
-                   /* try {
-                        Thread.sleep(1000);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    } */
-                    break;
-                case 1:
-                    series.add(di.getLi(), di.getShenDu());
-                    break;
-            }
+    public void initData(float x, float y) {
 
+        mDataSet.removeSeries(series);
+        series.add(x,y);
+       /* DataDB helper = new DataDB(context);
+        ArrayList<DataInfo> infos = helper.query();
+        int sum = infos.size();
+        float column[][] = new float[sum][3];
+        if (infos.size() > 0)
+        {
+            for(int i = 0; i < sum; i++) {
+                DataInfo info = infos.get(i);
+                column[i][LI] = info.getLi();
+                column[i][SHENDU] = info.getShenDu();
+                column[i][YAQIANG] = info.getYaQiang();
+            }
         }
+        switch (li) {
+            case 0 :
+                //for(int count = 0; count < sum; count ++)
+                    series.add(column[count][SHENDU], column[count][YAQIANG]);
+                break;
+            case 1 :
+               // for(int count = 0; count < sum; count ++)
+                    series.add(column[count][LI], column[count][SHENDU]);
+                break;
+        }
+        if (count < sum) count++; */
         mDataSet.addSeries(series);
     }
     protected void initRenderer() {
@@ -96,18 +104,18 @@ public class XYChartBuilder {
 
         mRenderer.setPointSize(0);
         mRenderer.setYLabelsPadding(5);
-        mRenderer.setYLabelsColor(0,Color.BLUE);
+        mRenderer.setYLabelsColor(0, Color.BLUE);
         mRenderer.setXLabelsColor(Color.BLUE);
         mRenderer.setXLabelsPadding(5);
         mRenderer.setXLabelsAngle(10);
 
         XYSeriesRenderer renderer = new XYSeriesRenderer();
-        mRenderer.addSeriesRenderer(renderer);
         renderer.setPointStyle(PointStyle.CIRCLE);
         renderer.setFillPoints(true);
         renderer.setDisplayChartValues(false);
         renderer.setDisplayChartValuesDistance(10);
         renderer.setLineWidth(10);
+        mRenderer.addSeriesRenderer(renderer);
 
         mRenderer.setClickEnabled(true);
         mRenderer.setSelectableBuffer(10);
